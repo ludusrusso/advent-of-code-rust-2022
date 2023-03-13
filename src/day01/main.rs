@@ -12,7 +12,7 @@ fn main() {
     print!("max calories: {:?}\n", be.total_calories());
 }
 
-fn find_max_calories(elves: &Vec<Elve>) -> Option<&Elve> {
+fn find_max_calories(elves: &Vec<Elf>) -> Option<&Elf> {
     elves
         .iter()
         .max_by(|a, b| a.total_calories().cmp(&b.total_calories()))
@@ -23,14 +23,14 @@ fn parse_calory(s: &str) -> IResult<&str, u32> {
 }
 
 #[derive(Debug)]
-struct Elve {
+struct Elf {
     calories: Vec<u32>,
 }
 
-impl Elve {
-    fn parse(s: &str) -> IResult<&str, Elve> {
+impl Elf {
+    fn parse(s: &str) -> IResult<&str, Elf> {
         let (s, calories) = separated_list1(newline, parse_calory)(s)?;
-        Ok((s, Elve { calories }))
+        Ok((s, Elf { calories }))
     }
 
     fn total_calories(&self) -> u32 {
@@ -38,9 +38,9 @@ impl Elve {
     }
 }
 
-fn parse_elves(s: &str) -> IResult<&str, Vec<Elve>> {
+fn parse_elves(s: &str) -> IResult<&str, Vec<Elf>> {
     let doublenewline = tuple((newline, newline));
-    separated_list1(doublenewline, Elve::parse)(s)
+    separated_list1(doublenewline, Elf::parse)(s)
 }
 
 #[cfg(test)]
