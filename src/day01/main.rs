@@ -9,17 +9,13 @@ fn main() {
     let input = include_str!("./data.txt");
     let (_, elves) = parse_elves(input).unwrap();
     let be = find_max_calories(&elves).unwrap();
-    print!("max calories: {:?}\n", be.total_calories());
+    println!("max calories: {:?}", be.total_calories());
 }
 
-fn find_max_calories(elves: &Vec<Elf>) -> Option<&Elf> {
+fn find_max_calories(elves: &[Elf]) -> Option<&Elf> {
     elves
         .iter()
         .max_by(|a, b| a.total_calories().cmp(&b.total_calories()))
-}
-
-fn parse_calory(s: &str) -> IResult<&str, u32> {
-    complete::u32(s)
 }
 
 #[derive(Debug)]
@@ -28,13 +24,17 @@ struct Elf {
 }
 
 impl Elf {
-    fn parse(s: &str) -> IResult<&str, Elf> {
-        let (s, calories) = separated_list1(newline, parse_calory)(s)?;
+    fn parse(s: &str) -> IResult<&str, Self> {
+        let (s, calories) = separated_list1(newline, Elf::parse_calories)(s)?;
         Ok((s, Elf { calories }))
     }
 
     fn total_calories(&self) -> u32 {
         self.calories.iter().sum()
+    }
+
+    fn parse_calories(s: &str) -> IResult<&str, u32> {
+        complete::u32(s)
     }
 }
 
