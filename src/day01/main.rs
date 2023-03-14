@@ -17,18 +17,14 @@ fn main() {
 }
 
 fn find_max_calories(elves: &[Elf]) -> Option<&Elf> {
-    elves.iter().max_by(|a, b| a.cmp(&b))
+    elves.iter().max_by(|a, b| a.cmp(b))
 }
 
 fn find_max_3_calories(elves: &[Elf]) -> Option<u32> {
     let mut c = elves.to_vec();
-    c.sort_by(|a, b| b.cmp(&a));
+    c.sort_by(|a, b| b.cmp(a));
 
-    let res = c[0..3]
-        .to_vec()
-        .into_iter()
-        .map(|e| e.total_calories())
-        .sum();
+    let res = c[0..3].iter().map(|e| e.total_calories()).sum();
     Some(res)
 }
 #[derive(Debug, Clone)]

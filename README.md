@@ -1,7 +1,7 @@
 # Advent of code rust 2022
 
 - [x] day 1
-- [ ] day 2
+- [x] day 2
 - [ ] day 3
 - [ ] day 4
 - [ ] day 5
