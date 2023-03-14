@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use nom::{
     character::complete::{self, newline},
     multi::separated_list1,
@@ -10,15 +12,26 @@ fn main() {
     let (_, elves) = parse_elves(input).unwrap();
     let be = find_max_calories(&elves).unwrap();
     println!("max calories: {:?}", be.total_calories());
+
+    println!("max 3 calories: {:?}", find_max_3_calories(&elves).unwrap());
 }
 
 fn find_max_calories(elves: &[Elf]) -> Option<&Elf> {
-    elves
-        .iter()
-        .max_by(|a, b| a.total_calories().cmp(&b.total_calories()))
+    elves.iter().max_by(|a, b| a.cmp(&b))
 }
 
-#[derive(Debug)]
+fn find_max_3_calories(elves: &[Elf]) -> Option<u32> {
+    let mut c = elves.to_vec();
+    c.sort_by(|a, b| b.cmp(&a));
+
+    let res = c[0..3]
+        .to_vec()
+        .into_iter()
+        .map(|e| e.total_calories())
+        .sum();
+    Some(res)
+}
+#[derive(Debug, Clone)]
 struct Elf {
     calories: Vec<u32>,
 }
@@ -36,6 +49,10 @@ impl Elf {
     fn parse_calories(s: &str) -> IResult<&str, u32> {
         complete::u32(s)
     }
+
+    pub fn cmp(&self, other: &Self) -> Ordering {
+        self.total_calories().cmp(&other.total_calories())
+    }
 }
 
 fn parse_elves(s: &str) -> IResult<&str, Vec<Elf>> {
@@ -47,12 +64,22 @@ fn parse_elves(s: &str) -> IResult<&str, Vec<Elf>> {
 mod tests {
     use super::*;
     #[test]
-    fn it_works() {
+    fn top_elf() {
         let example = include_str!("./sample.txt");
         let (res, elves) = parse_elves(example).unwrap();
         assert_eq!(res, "");
 
         let result = find_max_calories(&elves).unwrap();
         assert_eq!(result.total_calories(), 24000);
+    }
+
+    #[test]
+    fn top_3_elves() {
+        let example = include_str!("./sample.txt");
+        let (res, elves) = parse_elves(example).unwrap();
+        assert_eq!(res, "");
+
+        let result = find_max_3_calories(&elves).unwrap();
+        assert_eq!(result, 45000);
     }
 }
