@@ -1,8 +1,5 @@
-use std::error::Error;
-
-use nom::branch::alt;
 use nom::character::complete::{alphanumeric1, newline};
-use nom::multi::{many1, separated_list1};
+use nom::multi::separated_list1;
 use nom::sequence::tuple;
 use nom::IResult;
 
@@ -18,13 +15,13 @@ fn main() {
 fn compute_score(input: &str) -> IResult<&str, u32> {
     let (res, scores) = separated_list1(newline, parse_line_score)(input)?;
     let scores = scores.iter().sum();
-    return Ok((res, scores));
+    Ok((res, scores))
 }
 
 fn compute_3_elves_badge_scores(input: &str) -> IResult<&str, u32> {
     let (res, scores) = separated_list1(newline, parse_3_elf_badge)(input)?;
     let scores = scores.iter().sum();
-    return Ok((res, scores));
+    Ok((res, scores))
 }
 
 fn parse_line(input: &str) -> IResult<&str, (&str, &str)> {
@@ -32,14 +29,14 @@ fn parse_line(input: &str) -> IResult<&str, (&str, &str)> {
     let len = line.len() / 2;
     let left = &line[0..len];
     let right = &line[len..];
-    return Ok((input, (left, right)));
+    Ok((input, (left, right)))
 }
 
 fn parse_3_lines(input: &str) -> IResult<&str, (&str, &str, &str)> {
     let (input, (elf1, _)) = tuple((alphanumeric1, newline))(input)?;
     let (input, (elf2, _)) = tuple((alphanumeric1, newline))(input)?;
     let (input, elf3) = alphanumeric1(input)?;
-    return Ok((input, (elf1, elf2, elf3)));
+    Ok((input, (elf1, elf2, elf3)))
 }
 
 fn parse_3_elf_badge(input: &str) -> IResult<&str, u32> {
@@ -66,7 +63,7 @@ fn char_to_u32(c: &char) -> u32 {
     if *c >= 'A' && *c <= 'Z' {
         return *c as u32 - 'A' as u32 + 27;
     }
-    return *c as u32 - 'a' as u32 + 1;
+    *c as u32 - 'a' as u32 + 1
 }
 
 // test

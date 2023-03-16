@@ -35,7 +35,7 @@ fn get_partial_overlapped(input: &str) -> u32 {
 impl Range {
     fn parse(input: &str) -> IResult<&str, Self> {
         let (input, (start, end)) = separated_pair(complete::u32, tag("-"), complete::u32)(input)?;
-        return Ok((input, Self { start, end }));
+        Ok((input, Self { start, end }))
     }
 
     fn parse_pair(input: &str) -> IResult<&str, (Self, Self)> {
