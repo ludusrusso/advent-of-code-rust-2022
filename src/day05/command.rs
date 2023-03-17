@@ -65,6 +65,8 @@ mod tests {
 
     #[test]
     fn test_command() {
+        use super::*;
+
         let mut board = Board {
             tiles: vec![vec![TileElement::new('Z'), TileElement::new('N')], vec![]],
         };
