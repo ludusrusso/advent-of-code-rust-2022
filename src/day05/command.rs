@@ -48,6 +48,10 @@ impl Command {
 }
 
 mod tests {
+    use crate::board::TileElement;
+
+    use super::*;
+
     #[test]
     fn test_parse_command() {
         assert_eq!(
@@ -65,8 +69,6 @@ mod tests {
 
     #[test]
     fn test_command() {
-        use super::*;
-
         let mut board = Board {
             tiles: vec![vec![TileElement::new('Z'), TileElement::new('N')], vec![]],
         };
